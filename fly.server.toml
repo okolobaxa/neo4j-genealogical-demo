@@ -1,0 +1,22 @@
+# Fly.io config for the "neo4gen" app: .NET server that serves the SPA, /api and /agui.
+# Deploy from repo root:  fly deploy ./src -c ./fly.server.toml
+app = "neo4gen"
+primary_region = "arn"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    path = "/health"
+    interval = "15s"
+    timeout = "5s"
+    grace_period = "20s"
+    method = "get"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

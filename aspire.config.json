@@ -1,0 +1,5 @@
+{
+    "appHost": {
+        "path": "src/Neo4gen.AppHost/Neo4gen.AppHost.csproj"
+    }
+}

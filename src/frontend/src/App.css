@@ -1,0 +1,548 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---- Presentation mode ---- */
+.present-toggle {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.present-toggle:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.presentation-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+}
+.presentation-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  font-family: system-ui, sans-serif;
+}
+.presentation-title {
+  margin: 0;
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 800;
+  color: #0f172a;
+}
+.presentation-qr {
+  width: min(20rem, 60vw);
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: #fff;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 2rem;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+/* ---- Graph / NVL card ---- */
+.graph-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+.graph-canvas {
+  flex: 1;
+  min-height: 24rem;
+  width: 100%;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #f8fafc;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+  position: relative;
+}
+
+/* ---- Cypher panel below the graph ---- */
+.cypher-panel {
+  flex-shrink: 0;
+  background: #0f172a;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  text-align: left;
+}
+.cypher-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+.cypher-panel:has(.cypher-code) .cypher-panel-head {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.cypher-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 0.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.cypher-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+}
+.cypher-panel-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.cypher-copy-btn {
+  margin-left: auto;
+}
+.cypher-copy-btn {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #e2e8f0;
+  border-radius: 0.4rem;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.cypher-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+.cypher-copy-btn:active {
+  transform: scale(0.96);
+}
+.cypher-code {
+  margin: 0;
+  padding: 0.75rem;
+  max-height: 10rem;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #e2e8f0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.graph-controls {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 5;
+}
+.graph-control-btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
+  color: #1f2937;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.graph-control-btn:hover {
+  background: #f1f5f9;
+}
+.graph-control-btn:active {
+  transform: scale(0.94);
+}
+/* ---- Ctrl-select merge bar ---- */
+.merge-bar {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 90%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  background: rgba(15, 23, 42, 0.92);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  z-index: 6;
+}
+.merge-bar-count {
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.merge-btn {
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #4c8dff;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.merge-btn:hover:not(:disabled) {
+  background: #3a7bef;
+}
+.merge-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.remove-btn {
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  background: #d0021b;
+  color: #fff;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.remove-btn:hover:not(:disabled) {
+  background: #b00218;
+}
+.remove-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.merge-clear-btn {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.6rem;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.merge-clear-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+}
+.merge-bar-error {
+  color: #fca5a5;
+  font-size: 0.8rem;
+  max-width: 22rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.card-empty {
+  text-align: center;
+  font-style: italic;
+  opacity: 0.85;
+  font-size: 1rem;
+}
+.card-empty-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  width: 80%;
+}
+/* ---- Node properties modal ---- */
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.modal-card {
+  background: #fff;
+  color: #1f2937;
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  width: min(24rem, 90%);
+  max-height: 80%;
+  overflow-y: auto;
+  text-align: left;
+}
+.modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.modal-title {
+  margin: 0;
+  font-size: 1.15rem;
+}
+.modal-subtitle {
+  margin: 0.15rem 0 1rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+.modal-close {
+  border: none;
+  background: transparent;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+.modal-props {
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.modal-prop-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding-bottom: 0.4rem;
+}
+.modal-prop-row dt {
+  font-weight: 600;
+  opacity: 0.75;
+}
+.modal-prop-row dd {
+  margin: 0;
+  text-align: right;
+  word-break: break-word;
+}
+
+/* ---- Generative UI / HITL cards ---- */
+.gen-card {
+  border-radius: 1rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 28rem;
+  width: 100%;
+  margin: 1.5rem auto 0;
+  overflow: hidden;
+  color: #fff;
+}
+.gen-card-inner {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 1.5rem;
+}
+.gen-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gen-card-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+  text-transform: capitalize;
+}
+.gen-card-muted {
+  opacity: 0.9;
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+}
+.gen-card-icon {
+  font-size: 2.5rem;
+}
+.weather-temp-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+.weather-temp {
+  font-size: 2rem;
+  font-weight: 700;
+}
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+.weather-metric {
+  font-weight: 600;
+  margin: 0.1rem 0 0;
+}
+.moon-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+.moon-buttons {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+.btn {
+  flex: 1;
+  padding: 0.9rem 1.25rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn-primary {
+  background: #fff;
+  color: #000;
+}
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.chat-panel {
+  width: 400px;
+  flex-shrink: 0;
+  height: 100vh;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Let the embedded CopilotChat fill the panel height */
+.chat-panel > * {
+  flex: 1;
+  min-height: 0;
+}
+
+.chat-panel-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.chat-panel-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.github-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.1s ease, background 0.1s ease;
+}
+.github-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.chat-panel-inner > .chat-panel-header + * {
+  flex: 1;
+  min-height: 0;
+}
+
+.new-chat-button {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.new-chat-button:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px 12px;
+}
+
+.prompt-chip {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 16px;
+  padding: 8px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  cursor: pointer;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.prompt-chip:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* ---- "Visualise" button under agent answers containing Cypher ---- */
+.visualise-row {
+  display: flex;
+  padding: 4px 0 8px;
+}
+
+.visualise-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #4c8dff;
+  background: #4c8dff;
+  color: #fff;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.1s ease, transform 0.1s ease;
+}
+
+.visualise-button:hover:not(:disabled) {
+  background: #3a7bee;
+}
+
+.visualise-button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.visualise-button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

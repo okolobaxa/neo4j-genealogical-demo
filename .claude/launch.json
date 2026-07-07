@@ -1,0 +1,22 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "aspire-apphost",
+      "runtimeExecutable": "aspire",
+      "runtimeArgs": ["run", "--isolated"]
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "bun",
+      "runtimeArgs": [
+        "--cwd=/Users/okolobaxa/Documents/Projects/neo4gen/src/frontend",
+        "run",
+        "dev",
+        "--port",
+        "5173"
+      ],
+      "port": 5173
+    }
+  ]
+}

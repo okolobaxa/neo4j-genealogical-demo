@@ -1,0 +1,11 @@
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.vs
+**/.vscode
+*.esproj
+Neo4gen.AppHost
+copilot-runtime
+**/*.user
+.DS_Store
